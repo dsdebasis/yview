@@ -1,19 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import profile from "../../assets/profile.png"
 import { useState } from 'react'
 import axios from "axios"
 import Toast from '../Toast/Toast.jsx'
 import Loading from '../Loading/Loading.jsx'
+import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch,useSelector } from 'react-redux'
+import { login as authLogin } from '../../store/authSlice.js'
 
-import { MsgContext } from '../../Context/Context.jsx'
-import { useContext } from 'react'
 const Login = () => {
-  // const {login,setLogin} = useContext(MsgContext)
-  // console.log(login)
+   const navigate = useNavigate()
   const [toast, setToast] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState("")
+  const dispatch = useDispatch()
+  const authSelecter = useSelector((state)=>state.auth.status)
+ 
+
   const handleLogin = function (e) {
     e.preventDefault()
     setLoading(true)
@@ -29,11 +34,16 @@ const Login = () => {
     },config)
       .then((res) => {
         setToast(<Toast msg={res?.data?.message} className="border-b-green-600" />)
-     
+        console.log(res)
+        dispatch(authLogin(res?.data?.data))
+       navigate("/profile")
+        
       })
       .catch( (error) => {
-        setToast(<Toast msg={error?.response?.data?.message} className="border-b-red-600" />)
+        console.log(error)
+        setToast(<Toast error={error?.response?.data?.message} msg={"login failed"} className="border-b-red-600" />)
         // setLogin(false)
+        
         const timeOutID = setTimeout(() => {
           setToast("")
         }, 3000)
@@ -44,14 +54,16 @@ const Login = () => {
       .finally(() => {
         setLoading(false)
       })
+     
   }
 
+ 
   if (loading) {
     return (<Loading />)
   } else {
     return (
       <div className=' h-screen   bg-gradient-to-r from-slate-900 to-slate-700 flex flex-col  justify-center items-center px-5'>
-        <form action='/profile' className='text-white w-full lg:w-[35vw] h-[70vh] lg:h-[80vh]  rounded-3xl flex flex-col justify-evenly lg:justify-around bg-gradient-to-tr from-slate-600 to-slate-900 px-5 md:px-14 '>
+        <form onSubmit={handleLogin} className='text-white w-full lg:w-[35vw] h-[70vh] md:h-[80vh]  rounded-3xl flex flex-col justify-evenly lg:justify-around bg-gradient-to-tr from-slate-600 to-slate-900 px-5 md:px-14 '>
 
           <div className=' self-center justify-self-center'>
             <img src={profile} className='h-[150px] lg:h-[20vh]  rounded-full bg-white' />
@@ -68,11 +80,9 @@ const Login = () => {
             </div>
           </div>
 
+         <h1 className='md:text-xl text-center'>Don't have an account <Link to={"/signup"} className='text-blue-400 mx-2'>Signup</Link></h1>
 
-
-          <button type='submit' onClick={(e) => {
-            handleLogin(e)
-          }} className='bg-slate-800 w-full py-3 rounded-2xl hover:bg-slate-950'>Login</button>
+          <button type='submit'  className='w-full py-3 rounded-2xl bg-blue-600 hover:bg-slate-950'>Login</button>
 
         </form>
         {toast}

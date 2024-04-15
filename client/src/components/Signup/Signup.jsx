@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Loading from '../Loading/Loading.jsx'
 import axios from 'axios'
 import Toast from '../Toast/Toast.jsx'
+import { Link } from 'react-router-dom'
 const Signup = () => {
 
   const [fullname, setFullname] = useState("")
@@ -34,13 +35,13 @@ const Signup = () => {
       }
     }).then(
       (response) => {
-        // console.log(response.data)
-        setToast(<Toast  msg={response.response.data.message} className="border-l-green-600" />)
+        console.log(response?.data)
+        setToast(<Toast msg={response?.data?.message} className="border-l-green-600" />)
       }
     ).catch(function (error) {
       // console.table( error.response.data.error)
       console.log(error)
-      setToast(<Toast error={error.response.data.message} msg={error.message} className="border-l-red-600" />)
+      setToast(<Toast error={error?.response?.data?.message} msg={error.message} className="border-l-red-600" />)
 
     }
 
@@ -55,11 +56,11 @@ const Signup = () => {
   if (!loading) {
     return (
       <div className='h-screen text-sm md:text-lg  bg-gradient-to-bl from-gray-700 to-indigo-400 flex flex-col  justify-center items-center  md:px-5  relative'>
-        <form action='/signup' encType='multipart/form-data' method='POST' className='h-[95vh]  box-border md:w-fit md:h-[90%]  bg-gradient-to-bl from-slate-700 to-gray-900  text-white grid place-content-around md:grid-rows-4 md:items-center px-7 overflow-x-hidden overflow-y-auto rounded-3xl '>
+        <form action='/signup' encType='multipart/form-data' method='POST' className='h-[90vh]  box-border md:w-fit md:h-[90%]  bg-gradient-to-bl from-slate-700 to-gray-900  text-white grid place-content-evenly md:grid-rows-5 md:items-center px-7 py-5 overflow-x-hidden overflow-y-auto rounded-3xl '>
 
           <h1 className='md:text-3xl text-xl text-center '>Register</h1>
 
-          <div className='md:row-span-2 grid md:grid grid-flow-row  gap-y-3 md:grid-cols-2 md:gap-x-10 md:gap-y-4 justify-center '>
+          <div className='md:row-span-3 grid md:grid grid-flow-row  md:grid-cols-2 md:gap-x-10  justify-center '>
             <div className='w-full flex flex-col gap-y-2'>
               <label htmlFor='fullname'>Full Name</label>
               <input name='fullname' value={fullname} onChange={(e) => (setFullname(e.target.value))} type='text' className='box-border bg-transparent border-b-2 outline-none   pb-2 focus:border-blue-700 transition-border duration-200' />
@@ -87,8 +88,10 @@ const Signup = () => {
             </div>
 
           </div>
-
-          <button type='submit' className='h-12 md:h-20 w-full bg-blue-600 rounded-xl hover:bg-red-600' onClick={handleRegister}>Register</button>
+          <div >
+            <h1 className='text-center'>Have account ?<Link to={"/login"}className='text-blue-400 mx-1'>Login</Link></h1>
+          </div>
+          <button type='submit' className='h-12 md:h-14 w-full bg-blue-600 rounded-xl hover:bg-red-600' onClick={handleRegister}>Register</button>
 
         </form>
 

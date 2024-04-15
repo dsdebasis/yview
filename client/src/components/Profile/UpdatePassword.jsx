@@ -24,8 +24,8 @@ const UpdatePassword = () => {
       setTimeout(async () => {
         setToast("")
       }, 3000)
-    }).catch(()=>{
-      setToast(<Toast error={response?.data?.message} className={"border-red-500"} />)
+    }).catch((response)=>{
+      setToast(<Toast error={response?.response?.data?.message} className={"border-red-500"} />)
       setTimeout(async () => {
         setToast("")
       }, 3000)

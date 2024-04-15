@@ -28,11 +28,9 @@ const updatePassword = asyncHandler(async (req, res, next) => {
       passwordSaved = await findUser.save(
         {
           validateBeforeSave:false,
-
          }
       )
       passwordSaved = undefined
-     
     }
  
  

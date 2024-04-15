@@ -1,32 +1,56 @@
-import { createBrowserRouter} from 'react-router-dom'
-import {Home,Login,Signup,Profile,UpdatePassword,UpdateProfile} from "../components/index.js"
+import { createBrowserRouter } from 'react-router-dom'
+import { Home, Login, Signup, Profile, UpdatePassword, UpdateProfile } from "../components/index.js"
 import Logout from '../components/Login/Logout.jsx'
+import AuthLayout from './AuthLayout.jsx'
 const Routes = createBrowserRouter([
   {
-    path: "/", element: <Home />,
+    path: "/", element: (
+      <Home />
+    ),
 
   },
   {
-    path: "/login", element: <Login />
+    path: "/login", element: (
+      <Login />
+    )
   },
   {
-    path: "/signup", element: <Signup />
+    path: "/signup", element: (
+      <Signup />
+    )
   },
   {
-    path: "/Profile", element: <Profile />
+    path: "/Profile", element: (
+      <AuthLayout >
+        <Profile />
+      </AuthLayout>
+    )
   },
   {
-    path: "/UpdateProfile", element: <UpdateProfile />,
+    path: "/UpdateProfile", element: (
+      <AuthLayout >
+        <UpdateProfile />
+      </AuthLayout>
+    ),
 
   },
   {
-    path: "/UpdatePassword", element: <UpdatePassword />
-  },{
-    path:"/logout",element:<Logout/>
+    path: "/UpdatePassword", element: (
+      <AuthLayout >
+        <UpdatePassword />
+      </AuthLayout>
+    )
+  }, {
+    path: "/logout", element: (
+      <AuthLayout >
+        <Logout />
+      </AuthLayout>
+
+    )
   }
 ])
 
-export {Routes}
+export { Routes }
 
 
 // const Routes =  createBrowserRouter(createRoutesFromElements(

@@ -56,7 +56,8 @@ const registerUser = asyncHandler(async (req, res) => {
   const coverImageResponse = await uploadOnCloudinary(coverImageLocalPath)
 
   if (!prfoilePicResponse) throw new ApiError(500, "error while uploading")
-
+  console.log("proflepicDetails",prfoilePicResponse)
+  console.log("coverPicDetails",coverImageResponse)
   const newUser = await User.create({
     fullname: fullname,
     email: email,
@@ -72,7 +73,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, "error whie creating account")
   }
 
-  return res.status(201).json(new ApiResponse("successfully account created", createdUser))
+  return res.status(200).json(new ApiResponse(201,"successfully account created", createdUser))
 })
 
 
@@ -86,26 +87,26 @@ const login = asyncHandler(async (req, res) => {
   let verifyUser
   if (loginUser) {
 
-     verifyUser = jwt.verify(loginUser, process.env.ACCESS_TOKEN_SECRET)
+    verifyUser = jwt.verify(loginUser, process.env.ACCESS_TOKEN_SECRET)
   }
 
   if (verifyUser) {
     throw new ApiError(400, "already login")
-  } 
+  }
 
-    if (!username || !password) {
+  if (!username || !password) {
 
-      throw new ApiError(400, "every field is required")
-    }
+    throw new ApiError(400, "every field is required")
+  }
 
-    const findUser = await User.findOne({ username })
-    if (!findUser) {
-      throw new ApiError(400, "no user found")
-    }
- 
-    const checkPass = await findUser.isPasswordCorrect(password)
+  const findUser = await User.findOne({ username })
+  if (!findUser) {
+    throw new ApiError(400, "no user found")
+  }
 
-  
+  const checkPass = await findUser.isPasswordCorrect(password)
+
+
 
   if (!checkPass) {
 
@@ -147,7 +148,7 @@ const logout = asyncHandler(async (req, res) => {
   const user = req.user
   // console.log(user, "ds")
   const findUser = await User.findByIdAndUpdate(user._id, {
-    $inc: { activeDevice: -1 }, $set: { refreshToken:"undefined" }
+    $inc: { activeDevice: -1 }, $set: { refreshToken: "undefined" }
   })
 
   const options = {
